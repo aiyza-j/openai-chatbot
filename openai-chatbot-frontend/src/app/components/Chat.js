@@ -57,9 +57,8 @@ const Chat = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
-  // Connect to WebSocket on component mount
+
   useEffect(() => {
-    // Create WebSocket connection
     const wsUrl = `ws://${API_URL.replace('http://', '')}/api/ws/chat`;
     const socket = new WebSocket(wsUrl);
 
@@ -138,11 +137,11 @@ const Chat = () => {
     const userMessage = { role: 'user', content };
     setMessages(prev => [...prev, userMessage]);
 
-    // Add empty assistant message (will be filled by WebSocket responses)
+
     setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
     setIsLoading(true);
 
-    // Send message via WebSocket
+
     try {
       wsRef.current.send(
         JSON.stringify({
@@ -151,7 +150,7 @@ const Chat = () => {
       );
     } catch (error) {
       console.error('Error sending message via WebSocket:', error);
-      // Update the assistant message with error info
+
       setMessages(prev => {
         const updated = [...prev];
         updated[updated.length - 1] = {
@@ -161,8 +160,7 @@ const Chat = () => {
         return updated;
       });
     } finally {
-      // We'll set isLoading to false after a short delay
-      // This gives time for the first message chunk to arrive
+
       setTimeout(() => {
         setIsLoading(false);
       }, 500);
